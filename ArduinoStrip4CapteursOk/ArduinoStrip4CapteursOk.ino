@@ -28,6 +28,10 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels2(NUMPIXELS2, PIN2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels3(NUMPIXELS3, PIN3, NEO_GRB + NEO_KHZ800);
 //Adafruit_NeoPixel pixels4(NUMPIXELS4, PIN4, NEO_GRB + NEO_KHZ800);
+
+
+
+
 void setup()
 {
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -39,10 +43,27 @@ void setup()
   pixels3.begin();
   //pixels4.begin();
 }
- 
+
+void change_couleur(int couleur){
+  switch(couleur){
+        case 1:  pixels.setPixelColor(0, pixels.Color(0, 0, 255));  pixels.show(); delay(2000);pixels.clear();pixels.show();break;//bleu
+        case 2:  pixels2.setPixelColor(0, pixels2.Color(0, 255, 0));  pixels2.show(); delay(2000); pixels2.clear();pixels2.show();break;//vert
+        case 3:  pixels3.setPixelColor(0, pixels3.Color(255, 0, 0));  pixels3.show(); delay(2000); pixels3.clear();pixels3.show();break;// rouge
+  }
+}
+
+int tab[] = { 1, 2, 3 };
+
 void loop()
 {
-  val = analogRead(sensorpin);
+  for (int i=0; i<3; i++){
+    change_couleur(tab[i]);
+  }
+  
+
+
+  
+  /*val = analogRead(sensorpin);
   val2 = analogRead(sensorpin2);
   val3 = analogRead(sensorpin3);
   val4 = analogRead(sensorpin4);
@@ -88,5 +109,6 @@ void loop()
   
   
   else{pixels.clear(); pixels.show();pixels2.clear(); pixels2.show();pixels3.clear(); pixels3.show();}//pixels4.clear(); pixels4.show();}
+  */
   delay(100);
 }
