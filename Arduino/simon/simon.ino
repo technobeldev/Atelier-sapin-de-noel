@@ -37,8 +37,7 @@ const int nombreDeNotes = 49;
     delay(50);
   }
 }
-  
-*/
+  */
 
 
 #define PIN 3
@@ -48,9 +47,9 @@ const int nombreDeNotes = 49;
 
 
 
-#define NUMPIXELS 5
-#define NUMPIXELS2 5
-#define NUMPIXELS3 5
+#define NUMPIXELS 25
+#define NUMPIXELS2 25
+#define NUMPIXELS3 25
 #define NUMPIXELS4 5
 
 
@@ -61,7 +60,7 @@ const int nombreDeNotes = 49;
 
 
 
-#define sensorpin  0                 // analog pin used to connect the sharp sensor
+#define sensorpin  0 
 #define sensorpin2  1
 #define sensorpin3  2
 #define sensorpin4  3
@@ -86,7 +85,7 @@ void setup()
 
   //Matrix
     lmd.setEnabled(true);
-    lmd.setIntensity(2); // 0 = low, 10 = high
+    lmd.setIntensity(5); // 0 = low, 10 = high
 
   //Jeu Simon
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -110,6 +109,9 @@ void setup()
  }
 
 
+
+
+
  
 //Simon
  int val = 0;
@@ -128,7 +130,7 @@ void setup()
  String myString;
 
  int tab[13];
- int  TAILLE = 4;
+ int  TAILLE = 13;
 
  int perdu = 0;
  unsigned long debut_partie;
@@ -202,9 +204,30 @@ byte font[95][8] = { {0,0,0,0,0,0,0,0}, // SPACE
                   };    // {}, //
 
 
- 
+
  
 void loop(){
+ /*
+  for(int i=0; i<NUMPIXELS; i++) { 
+    pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+    pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));
+    pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));
+    pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));
+   
+    
+     for(int i=0; i<NUMPIXELS; i++) { 
+    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
+
+
+      for(int i=0; i<NUMPIXELS; i++) { 
+    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
+
+
+      for(int i=0; i<NUMPIXELS; i++) { 
+    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
+
+*/
+  
 //Simon
   val = analogRead(sensorpin);
   val2 = analogRead(sensorpin2);
@@ -305,30 +328,30 @@ if (val>400 and val4>400){
  
    }
 }
-
-
-
-//Simon
+//Fonctions Simon
 void change_couleur_des_led_real_time(int couleur){
   switch(couleur){
-        case 1:  pixels.setPixelColor(0, pixels.Color(0, 0, 255));  pixels.show();tone(4,440,100); break;//bleu
-        case 2:  pixels2.setPixelColor(0, pixels2.Color(0, 255, 0));  pixels2.show();tone(4,350,100);break;//vert
-        case 3:  pixels3.setPixelColor(0, pixels3.Color(255, 0, 0));  pixels3.show();tone(4,500,100); break;// rouge
-        case 4:  pixels4.setPixelColor(0, pixels4.Color(125, 0, 125));  pixels4.show();tone(4,250,100);break;// mauve
+        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255));} pixels.show();tone(4,440,100); break;//bleu
+        case 2:  for(int i=0; i<NUMPIXELS2; i++) { pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));} pixels2.show();tone(4,350,100);break;//vert
+        case 3:  for(int i=0; i<NUMPIXELS3; i++) { pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));} pixels3.show();tone(4,500,100); break;// rouge
+        case 4:  for(int i=0; i<NUMPIXELS4; i++) { pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));} pixels4.show();tone(4,250,100);break;// mauve
         case 99: pixels.clear(); pixels.show();pixels2.clear(); pixels2.show();pixels3.clear(); pixels3.show();pixels4.clear(); pixels4.show();break;
   }
 }
 void change_couleur_des_led(int couleur){
   switch(couleur){
-        case 1:  pixels.setPixelColor(0, pixels.Color(0, 0, 255));  pixels.show();tone(4,440,100); delay(500);pixels.clear();pixels.show();delay(500);break;//bleu
-        case 2:  pixels2.setPixelColor(0, pixels2.Color(0, 255, 0));  pixels2.show();tone(4,350,100);delay(500); pixels2.clear();pixels2.show();delay(500);break;//vert
-        case 3:  pixels3.setPixelColor(0, pixels3.Color(255, 0, 0));  pixels3.show();tone(4,500,100);delay(500); pixels3.clear();pixels3.show();delay(500);break;// rouge
-        case 4:  pixels4.setPixelColor(0, pixels4.Color(125, 0, 125));  pixels4.show();tone(4,250,100);delay(500);pixels4.clear();pixels4.show();delay(500);break;// mauve
+        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255));};  pixels.show();tone(4,440,100); delay(500);pixels.clear();pixels.show();delay(500);break;//bleu
+        case 2:  for(int i=0; i<NUMPIXELS2; i++) { pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));};  pixels2.show();tone(4,350,100);delay(500); pixels2.clear();pixels2.show();delay(500);break;//vert
+        case 3:  for(int i=0; i<NUMPIXELS3; i++) { pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));};  pixels3.show();tone(4,500,100);delay(500); pixels3.clear();pixels3.show();delay(500);break;// rouge
+        case 4:  for(int i=0; i<NUMPIXELS4; i++) { pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));};  pixels4.show();tone(4,250,100);delay(500);pixels4.clear();pixels4.show();delay(500);break;// mauve
   }
 }
 
 
-//Matrix
+
+
+//Fonctions Matrix
+
 
 
 
@@ -344,6 +367,9 @@ void drawString(char* text, int len, int x, int y )
       drawSprite( font[c], x + idx * 8, y, 8, 8 );
   }
 }
+
+
+
 
 void drawSprite( byte* sprite, int x, int y, int width, int height )
 {
@@ -363,7 +389,9 @@ void drawSprite( byte* sprite, int x, int y, int width, int height )
 }
 
 
-void affichage(String mot){
+
+
+ void affichage(String mot){
   Serial.print(mot);
   char text[mot.length()+1];
   mot.toCharArray(text, mot.length()+1);
