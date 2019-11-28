@@ -8,7 +8,7 @@
 #define BUZZER1  4
 #define BUZZER2  7
 
-/*
+
 //noel
 const float note[12] = {65.41, 69.30, 73.42, 77.78, 82.41, 87.31, 92.50, 98.00, 103.83, 110.00, 116.54, 123.47
                        };
@@ -37,7 +37,7 @@ const int nombreDeNotes = 49;
     delay(50);
   }
 }
-  */
+  
 
 
 #define PIN 3
@@ -50,7 +50,7 @@ const int nombreDeNotes = 49;
 #define NUMPIXELS 25
 #define NUMPIXELS2 25
 #define NUMPIXELS3 25
-#define NUMPIXELS4 5
+#define NUMPIXELS4 15
 
 
 
@@ -130,7 +130,7 @@ void setup()
  String myString;
 
  int tab[13];
- int  TAILLE = 13;
+ int  TAILLE = 2;
 
  int perdu = 0;
  unsigned long debut_partie;
@@ -207,27 +207,7 @@ byte font[95][8] = { {0,0,0,0,0,0,0,0}, // SPACE
 
  
 void loop(){
- /*
-  for(int i=0; i<NUMPIXELS; i++) { 
-    pixels.setPixelColor(i, pixels.Color(0, 0, 255));
-    pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));
-    pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));
-    pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));
    
-    
-     for(int i=0; i<NUMPIXELS; i++) { 
-    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
-
-
-      for(int i=0; i<NUMPIXELS; i++) { 
-    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
-
-
-      for(int i=0; i<NUMPIXELS; i++) { 
-    pixels.setPixelColor(i, pixels.Color(0, 150, 0));
-
-*/
-  
 //Simon
   val = analogRead(sensorpin);
   val2 = analogRead(sensorpin2);
@@ -316,7 +296,7 @@ if (val>400 and val4>400){
 
     if (perdu == 0){
       affichage("BIEN JOUE VOUS AVEZ GAGNE");
-      //jingleBells();
+      jingleBells();
     }else{
       affichage("VOUS AVEZ PERDU AU LEVEL"+ String(nbr_jeux-1));
     }
