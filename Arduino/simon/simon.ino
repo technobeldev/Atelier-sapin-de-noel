@@ -39,19 +39,28 @@ const int nombreDeNotes = 49;
 }
   
 
-
+//strip
 #define PIN 3
 #define PIN2 5
 #define PIN3 6
 #define PIN4 10
 
+//led rappel
+#define PIN11 8
+#define PIN22 11
+#define PIN33 12
+#define PIN44 13
 
-
-#define NUMPIXELS 25
-#define NUMPIXELS2 25
-#define NUMPIXELS3 25
-#define NUMPIXELS4 15
-
+//Strip
+#define NUMPIXELS 50
+#define NUMPIXELS2 50
+#define NUMPIXELS3 50
+#define NUMPIXELS4 50
+//led rappel
+#define NUMPIXELS11 2
+#define NUMPIXELS22 2
+#define NUMPIXELS33 2
+#define NUMPIXELS44 2
 
 
 #ifdef __AVR__
@@ -66,11 +75,19 @@ const int nombreDeNotes = 49;
 #define sensorpin4  3
 
 
-
+//strip
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels2(NUMPIXELS2, PIN2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels3(NUMPIXELS3, PIN3, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels4(NUMPIXELS4, PIN4, NEO_GRB + NEO_KHZ800);
+
+
+//led rappel
+Adafruit_NeoPixel pixels11(NUMPIXELS11, PIN11, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels22(NUMPIXELS22, PIN22, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels33(NUMPIXELS33, PIN33, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels44(NUMPIXELS44, PIN44, NEO_GRB + NEO_KHZ800);
+
 
  //Matrix
   const uint8_t LEDMATRIX_CS_PIN = 9;
@@ -94,8 +111,8 @@ void setup()
 
   pinMode(BUZZER1, OUTPUT);
   pinMode(BUZZER2, OUTPUT);
-
-  Serial.begin(9600);
+//strip
+  //Serial.begin(9600);
   pixels.begin();
   pixels2.begin();
   pixels3.begin();
@@ -105,6 +122,30 @@ void setup()
   pixels2.clear();pixels2.show();
   pixels3.clear();pixels3.show();
   pixels4.clear();pixels4.show();
+
+//led rappel
+  pixels11.begin();
+  pixels22.begin();
+  pixels33.begin();
+  pixels44.begin();
+
+  pixels11.clear();pixels11.show();
+  pixels22.clear();pixels22.show();
+  pixels33.clear();pixels33.show();
+  pixels44.clear();pixels44.show();
+
+   for(int i=0; i<NUMPIXELS11; i++) { pixels11.setPixelColor(i, pixels11.Color(0,255,0));} 
+   for(int i=0; i<NUMPIXELS22; i++) { pixels22.setPixelColor(i, pixels22.Color(0,0, 255));} 
+   for(int i=0; i<NUMPIXELS33; i++) { pixels33.setPixelColor(i, pixels33.Color(255, 0, 0));} 
+   for(int i=0; i<NUMPIXELS44; i++) { pixels44.setPixelColor(i, pixels44.Color(125, 0, 125));} 
+  
+    
+    pixels11.show();
+    pixels22.show();
+    pixels33.show();
+    pixels44.show();
+
+  
   //Fin setup.
  }
 
@@ -130,7 +171,7 @@ void setup()
  String myString;
 
  int tab[13];
- int  TAILLE = 2;
+ int  TAILLE = 5;
 
  int perdu = 0;
  unsigned long debut_partie;
@@ -207,6 +248,8 @@ byte font[95][8] = { {0,0,0,0,0,0,0,0}, // SPACE
 
  
 void loop(){
+                     
+  affichageStatique("WELCOME");
    
 //Simon
   val = analogRead(sensorpin);
@@ -241,6 +284,7 @@ if (val>400 and val4>400){
 
     
     while (nbr_jeux < TAILLE+1 and perdu == 0){
+      affichageStatique("LEVEL "+String(nbr_jeux));
       while (iteration < nbr_jeux and perdu == 0){ 
         if (affiche_couleur == false){
           for (z = 0; z < nbr_jeux; z++){
@@ -372,7 +416,9 @@ void drawSprite( byte* sprite, int x, int y, int width, int height )
 
 
  void affichage(String mot){
-  Serial.print(mot);
+  char text2[] = "        ";
+  drawString(text2, 8, x, 0);
+  lmd.display();
   char text[mot.length()+1];
   mot.toCharArray(text, mot.length()+1);
   x=63;
@@ -381,9 +427,22 @@ void drawSprite( byte* sprite, int x, int y, int width, int height )
   for (int i=0; i<((len*8)+64); i++){
     drawString(text, len, x, 0);
     lmd.display();
-    delay(30);
+    delay(13);
     if( --x < len * -8 ) {
       x = LEDMATRIX_WIDTH;
       }
     } 
+  }
+
+
+  void affichageStatique(String mot){
+    char text2[] = "        ";
+    drawString(text2, 8, x, 0);
+    lmd.display();
+    char text[mot.length()+1];
+    mot.toCharArray(text, mot.length()+1);
+    x=0;
+    int len = strlen(text);
+    drawString(text, len, x, 0);
+    lmd.display();
   }
