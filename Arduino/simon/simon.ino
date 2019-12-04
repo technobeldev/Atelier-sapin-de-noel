@@ -1,10 +1,10 @@
+#include <WS2812FX.h>
 #include <Adafruit_NeoPixel.h>;
-/*#include <stdio.h>
-#include <stdlib.h>*/
 #include <time.h>
 #include <LEDMatrixDriver.hpp>
 
 
+//haut parleur
 #define BUZZER1  4
 #define BUZZER2  7
 
@@ -12,7 +12,7 @@
 //noel
 const float note[12] = {65.41, 69.30, 73.42, 77.78, 82.41, 87.31, 92.50, 98.00, 103.83, 110.00, 116.54, 123.47
                        };
-void jingleBells(void) {
+/*void jingleBells(void) {
 
   // Vive le vent
 const int nombreDeNotes = 49;
@@ -37,13 +37,27 @@ const int nombreDeNotes = 49;
     delay(50);
   }
 }
-  
+  */
 
 //strip
-#define PIN 3
-#define PIN2 5
-#define PIN3 6
-#define PIN4 10
+#define PIN 2
+#define PIN2 3
+#define PIN3 4
+#define PIN4 5
+
+
+//Chenillard
+#define LED_COUNT 150
+//#define LED_PIN 11
+#define TIMER_MS 5000
+WS2812FX ws2812fx1 = WS2812FX(LED_COUNT, PIN, NEO_RGB + NEO_KHZ800);
+WS2812FX ws2812fx2 = WS2812FX(LED_COUNT, PIN2, NEO_RGB + NEO_KHZ800);
+WS2812FX ws2812fx3 = WS2812FX(LED_COUNT, PIN3, NEO_RGB + NEO_KHZ800);
+WS2812FX ws2812fx4 = WS2812FX(LED_COUNT, PIN4, NEO_RGB + NEO_KHZ800);
+unsigned long last_change = 0;
+unsigned long now = 0;
+
+
 
 //led rappel
 #define PIN11 8
@@ -52,10 +66,10 @@ const int nombreDeNotes = 49;
 #define PIN44 13
 
 //Strip
-#define NUMPIXELS 50
+#define NUMPIXELS 25
 #define NUMPIXELS2 50
-#define NUMPIXELS3 50
-#define NUMPIXELS4 50
+#define NUMPIXELS3 75
+#define NUMPIXELS4 100
 //led rappel
 #define NUMPIXELS11 2
 #define NUMPIXELS22 2
@@ -64,7 +78,7 @@ const int nombreDeNotes = 49;
 
 
 #ifdef __AVR__
- #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
 
 
@@ -76,10 +90,10 @@ const int nombreDeNotes = 49;
 
 
 //strip
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixels2(NUMPIXELS2, PIN2, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixels3(NUMPIXELS3, PIN3, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixels4(NUMPIXELS4, PIN4, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels(150, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels2(150, PIN2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels3(150, PIN3, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels4(150, PIN4, NEO_GRB + NEO_KHZ800);
 
 
 //led rappel
@@ -99,20 +113,61 @@ Adafruit_NeoPixel pixels44(NUMPIXELS44, PIN44, NEO_GRB + NEO_KHZ800);
 
 void setup()
 {
-
-  //Matrix
+//Matrix
     lmd.setEnabled(true);
     lmd.setIntensity(5); // 0 = low, 10 = high
+  
+  //Chenillard
+  ws2812fx1.init();
+  ws2812fx1.setBrightness(100);
+  ws2812fx1.setSpeed(1000);
+  ws2812fx1.setColor(0x007BFF);
+  ws2812fx1.setMode(FX_MODE_STATIC);
+  ws2812fx1.start();
+
+  
+  ws2812fx2.init();
+  ws2812fx2.setBrightness(100);
+  ws2812fx2.setSpeed(1000);
+  ws2812fx2.setColor(0x007BFF);
+  ws2812fx2.setMode(FX_MODE_STATIC);
+  ws2812fx2.start();
+
+  
+  ws2812fx3.init();
+  ws2812fx3.setBrightness(100);
+  ws2812fx3.setSpeed(1000);
+  ws2812fx3.setColor(0x007BFF);
+  ws2812fx3.setMode(FX_MODE_STATIC);
+  ws2812fx3.start();
+
+  
+  ws2812fx4.init();
+  ws2812fx4.setBrightness(100);
+  ws2812fx4.setSpeed(1000);
+  ws2812fx4.setColor(0x007BFF);
+  ws2812fx4.setMode(FX_MODE_STATIC);
+  ws2812fx4.start();
+
+  
+  
+
+
 
   //Jeu Simon
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
   clock_prescale_set(clock_div_1);
   #endif
 
+
+  //Haut parleur
   pinMode(BUZZER1, OUTPUT);
   pinMode(BUZZER2, OUTPUT);
+
+
+  
 //strip
-  //Serial.begin(9600);
+  Serial.begin(9600);
   pixels.begin();
   pixels2.begin();
   pixels3.begin();
@@ -264,6 +319,7 @@ if (val>400 and val4>400){
   }
   
   if (pret){
+    change_couleur_des_led_real_time(99);
     affichage("START DANS");
     delay(500);
     for (i=0; i<4; i++){
@@ -340,7 +396,7 @@ if (val>400 and val4>400){
 
     if (perdu == 0){
       affichage("BIEN JOUE VOUS AVEZ GAGNE");
-      jingleBells();
+      //jingleBells();
     }else{
       affichage("VOUS AVEZ PERDU AU LEVEL"+ String(nbr_jeux-1));
     }
@@ -350,26 +406,48 @@ if (val>400 and val4>400){
     perdu = 0;
     pret = false;
  
+   }else{
+      //Chenillard
+       now = millis();
+    
+      ws2812fx1.service();
+      ws2812fx2.service();
+      ws2812fx3.service();
+      ws2812fx4.service();
+    
+      if(now - last_change > TIMER_MS) {
+        ws2812fx1.setMode((ws2812fx1.getMode() + 1) % ws2812fx1.getModeCount());
+        ws2812fx2.setMode((ws2812fx2.getMode() + 1) % ws2812fx2.getModeCount());
+        ws2812fx3.setMode((ws2812fx3.getMode() + 1) % ws2812fx3.getModeCount());
+        ws2812fx4.setMode((ws2812fx4.getMode() + 1) % ws2812fx4.getModeCount());
+        last_change = now;
+      }
    }
 }
 //Fonctions Simon
 void change_couleur_des_led_real_time(int couleur){
   switch(couleur){
-        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255));} pixels.show();tone(4,440,100); break;//bleu
-        case 2:  for(int i=0; i<NUMPIXELS2; i++) { pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));} pixels2.show();tone(4,350,100);break;//vert
-        case 3:  for(int i=0; i<NUMPIXELS3; i++) { pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));} pixels3.show();tone(4,500,100); break;// rouge
-        case 4:  for(int i=0; i<NUMPIXELS4; i++) { pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));} pixels4.show();tone(4,250,100);break;// mauve
+        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255)); pixels2.setPixelColor(i, pixels2.Color(0, 0, 255)); pixels3.setPixelColor(i, pixels3.Color(0, 0, 255)); pixels4.setPixelColor(i, pixels4.Color(0, 0, 255));} pixels.show();pixels2.show();pixels3.show();pixels4.show();tone(4,440,100); break;//bleu
+        case 2:  for(int i=NUMPIXELS; i<NUMPIXELS2; i++) { pixels.setPixelColor(i, pixels.Color(0, 255, 0)); pixels2.setPixelColor(i, pixels2.Color(0, 255, 0)); pixels3.setPixelColor(i, pixels3.Color(0, 255, 0)); pixels4.setPixelColor(i, pixels4.Color(0, 255, 0));}pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,350,100);break;//vert
+        case 3:  for(int i=NUMPIXELS2; i<NUMPIXELS3; i++) { pixels.setPixelColor(i, pixels.Color(255, 0, 0)); pixels2.setPixelColor(i, pixels2.Color(255, 0, 0)); pixels3.setPixelColor(i, pixels3.Color(255, 0, 0)); pixels4.setPixelColor(i, pixels4.Color(255,0, 0));} pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,500,100); break;// rouge
+        case 4:  for(int i=NUMPIXELS3; i<NUMPIXELS4; i++) { pixels.setPixelColor(i, pixels.Color(125, 0, 125)); pixels2.setPixelColor(i, pixels2.Color(125, 0, 125)); pixels3.setPixelColor(i, pixels3.Color(125, 0, 125)); pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));}pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,250,100);break;// mauve
         case 99: pixels.clear(); pixels.show();pixels2.clear(); pixels2.show();pixels3.clear(); pixels3.show();pixels4.clear(); pixels4.show();break;
   }
 }
 void change_couleur_des_led(int couleur){
   switch(couleur){
-        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255));};  pixels.show();tone(4,440,100); delay(500);pixels.clear();pixels.show();delay(500);break;//bleu
-        case 2:  for(int i=0; i<NUMPIXELS2; i++) { pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));};  pixels2.show();tone(4,350,100);delay(500); pixels2.clear();pixels2.show();delay(500);break;//vert
-        case 3:  for(int i=0; i<NUMPIXELS3; i++) { pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));};  pixels3.show();tone(4,500,100);delay(500); pixels3.clear();pixels3.show();delay(500);break;// rouge
-        case 4:  for(int i=0; i<NUMPIXELS4; i++) { pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));};  pixels4.show();tone(4,250,100);delay(500);pixels4.clear();pixels4.show();delay(500);break;// mauve
+        //case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255));};  pixels.show();tone(4,440,100); delay(500);pixels.clear();pixels.show();delay(500);break;//bleu
+        //case 2:  for(int i=0; i<NUMPIXELS2; i++) { pixels2.setPixelColor(i, pixels2.Color(0, 255, 0));};  pixels2.show();tone(4,350,100);delay(500); pixels2.clear();pixels2.show();delay(500);break;//vert
+        //case 3:  for(int i=0; i<NUMPIXELS3; i++) { pixels3.setPixelColor(i, pixels3.Color(255, 0, 0));};  pixels3.show();tone(4,500,100);delay(500); pixels3.clear();pixels3.show();delay(500);break;// rouge
+        //case 4:  for(int i=0; i<NUMPIXELS4; i++) { pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));};  pixels4.show();tone(4,250,100);delay(500);pixels4.clear();pixels4.show();delay(500);break;// mauve
+        case 1:  for(int i=0; i<NUMPIXELS; i++) { pixels.setPixelColor(i, pixels.Color(0, 0, 255)); pixels2.setPixelColor(i, pixels2.Color(0, 0, 255)); pixels3.setPixelColor(i, pixels3.Color(0, 0, 255)); pixels4.setPixelColor(i, pixels4.Color(0, 0, 255));} pixels.show();pixels2.show();pixels3.show();pixels4.show();tone(4,440,100);delay(500);pixels.clear();pixels.show();pixels2.clear();pixels2.show();pixels3.clear();pixels3.show();pixels4.clear();pixels4.show();delay(500); break;//bleu
+        case 2:  for(int i=NUMPIXELS; i<NUMPIXELS2; i++) { pixels.setPixelColor(i, pixels.Color(0, 255, 0)); pixels2.setPixelColor(i, pixels2.Color(0, 255, 0)); pixels3.setPixelColor(i, pixels3.Color(0, 255, 0)); pixels4.setPixelColor(i, pixels4.Color(0, 255, 0));}pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,350,100);delay(500); pixels.clear();pixels.show();pixels2.clear();pixels2.show();pixels3.clear();pixels3.show();pixels4.clear();pixels4.show();delay(500);break;//vert
+        case 3:  for(int i=NUMPIXELS2; i<NUMPIXELS3; i++) { pixels.setPixelColor(i, pixels.Color(255, 0, 0)); pixels2.setPixelColor(i, pixels2.Color(255, 0, 0)); pixels3.setPixelColor(i, pixels3.Color(255, 0, 0)); pixels4.setPixelColor(i, pixels4.Color(255,0, 0));} pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,500,100);delay(500); pixels.clear();pixels.show();pixels2.clear();pixels2.show();pixels3.clear();pixels3.show();pixels4.clear();pixels4.show();delay(500);break;// rouge
+        case 4:  for(int i=NUMPIXELS3; i<NUMPIXELS4; i++) { pixels.setPixelColor(i, pixels.Color(125, 0, 125)); pixels2.setPixelColor(i, pixels2.Color(125, 0, 125)); pixels3.setPixelColor(i, pixels3.Color(125, 0, 125)); pixels4.setPixelColor(i, pixels4.Color(125, 0, 125));}pixels.show(); pixels2.show();pixels3.show();pixels4.show();tone(4,250,100);delay(500);pixels.clear();pixels.show();pixels2.clear();pixels2.show();pixels3.clear();pixels3.show();pixels4.clear();pixels4.show();delay(500);break;// mauve
   }
 }
+
+
 
 
 
@@ -436,6 +514,7 @@ void drawSprite( byte* sprite, int x, int y, int width, int height )
 
 
   void affichageStatique(String mot){
+    //Serial.println(mot);
     char text2[] = "        ";
     drawString(text2, 8, x, 0);
     lmd.display();
