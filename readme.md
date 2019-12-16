@@ -1,7 +1,4 @@
-Section **hyper** importante!!!
+Réalisation d'un atelier **Sapin de noel interactif** en collaboration avec le centre forem de dinant
 
-Listes des fonctionnalités:
-* Lien vers le trello?
-* Ajouter un slack
-* Utilisation du git
+
 
