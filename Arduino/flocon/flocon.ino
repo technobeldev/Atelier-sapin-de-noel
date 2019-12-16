@@ -81,6 +81,7 @@ const int ANIM_DELAY = 100;
 
 void loop() {
 
+
   drawSprite( (byte*)&a, x++, 0, 8, 8 );
   lmd.display();
   delay(ANIM_DELAY);

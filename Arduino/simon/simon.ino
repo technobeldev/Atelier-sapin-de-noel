@@ -4,40 +4,6 @@
 #include <LEDMatrixDriver.hpp>
 
 
-//haut parleur
-#define BUZZER1  4
-#define BUZZER2  7
-
-
-//noel
-const float note[12] = {65.41, 69.30, 73.42, 77.78, 82.41, 87.31, 92.50, 98.00, 103.83, 110.00, 116.54, 123.47
-                       };
-/*void jingleBells(void) {
-
-  // Vive le vent
-const int nombreDeNotes = 49;
-  const int tempo = 150; // plus c'est petit, plus c'est rapide
-  const int melodie[][3] = { {4, 2, 2}, {4, 2, 2}, {4, 2, 4}, {4, 2, 2}, {4, 2, 2}, {4, 2, 4},
-    {4, 2, 2}, {7, 2, 2},  {0, 2, 3},  {2, 2, 1},  {4, 2, 8},
-    {5, 2, 2}, {5, 2, 2}, {5, 2, 3}, {5, 2, 1}, {5, 2, 2}, {4, 2, 2}, {4, 2, 3},
-    {4, 2, 1}, {4, 2, 2}, {2, 2, 2}, {2, 2, 2}, {4, 2, 2}, {2, 2, 4}, {7, 2, 4},
-    {4, 2, 2}, {4, 2, 2}, {4, 2, 4}, {4, 2, 2}, {4, 2, 2}, {4, 2, 4},
-    {4, 2, 2}, {7, 2, 2},  {0, 2, 3},  {2, 2, 1},  {4, 2, 8},
-    {5, 2, 2}, {5, 2, 2}, {5, 2, 3}, {5, 2, 1}, {5, 2, 2}, {4, 2, 2}, {4, 2, 3},
-    {4, 2, 1}, {7, 2, 2}, {7, 2, 2}, {5, 2, 2}, {2, 2, 2}, {0, 2, 8}
-  };
-
-  int frequence;
-
-  for ( int i = 0; i < nombreDeNotes ; i++ ) {
-    frequence = round(note[melodie[i][0]] * 2 * (melodie[i][1] - 1));
-    tone(4, frequence);
-    delay(tempo * melodie[i][2] - 50);
-    noTone(4);
-    delay(50);
-  }
-}
-  */
 
 //strip
 #define PIN 2
@@ -48,7 +14,7 @@ const int nombreDeNotes = 49;
 
 //Chenillard
 #define LED_COUNT 150
-//#define LED_PIN 11
+
 #define TIMER_MS 5000
 WS2812FX ws2812fx1 = WS2812FX(LED_COUNT, PIN, NEO_RGB + NEO_KHZ800);
 WS2812FX ws2812fx2 = WS2812FX(LED_COUNT, PIN2, NEO_RGB + NEO_KHZ800);
@@ -65,11 +31,7 @@ unsigned long now = 0;
 #define PIN33 12
 #define PIN44 13
 
-//Strip
-#define NUMPIXELS 25
-#define NUMPIXELS2 50
-#define NUMPIXELS3 75
-#define NUMPIXELS4 100
+
 //led rappel
 #define NUMPIXELS11 2
 #define NUMPIXELS22 2
@@ -115,7 +77,7 @@ void setup()
 {
 //Matrix
     lmd.setEnabled(true);
-    lmd.setIntensity(5); // 0 = low, 10 = high
+
   
   //Chenillard
   ws2812fx1.init();
@@ -226,7 +188,7 @@ void setup()
  String myString;
 
  int tab[13];
- int  TAILLE = 5;
+
 
  int perdu = 0;
  unsigned long debut_partie;
